@@ -4,7 +4,7 @@
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import parse_qs
-import Udacian
+from udacian import Udacian
 
 memory = []
 form = '''<!DOCTYPE html>
@@ -36,23 +36,24 @@ class MessageHandler(BaseHTTPRequestHandler):
         data = self.rfile.read(length).decode()
 
          # 3. Extract the "message" field from the request data.
-        memory.clear()
-        memory.append(parse_qs(data)["name"][0])
-        memory.append(parse_qs(data)["city"][0])
-        memory.append(parse_qs(data)["enrollment"][0])
-        memory.append(parse_qs(data)["nanodegree"][0])
-        memory.append(parse_qs(data)["status"][0])
+        ud = Udacian(parse_qs(data)["name"][0], parse_qs(data)["city"][0], parse_qs(data)["enrollment"][0]
+        , parse_qs(data)["nanodegree"][0], parse_qs(data)["status"][0])
+        # memory.append(parse_qs(data)["name"][0])
+        # memory.append(parse_qs(data)["city"][0])
+        # memory.append(parse_qs(data)["enrollment"][0])
+        # memory.append(parse_qs(data)["nanodegree"][0])
+        # memory.append(parse_qs(data)["status"][0])
 
-        udacian = Udacian(memory)
+        memory.append(ud)
 
-        response = '''
-        <h1>{0}</h1>
-        <p>{1}</p>
-        <p>{2}</p>
-        <p>{3}</p>
-        <p>{4}</p>
-        '''.format(memory)
-
+        # response = '''
+        # <h1>{0}</h1>
+        # <p>{1}</p>
+        # <p>{2}</p>
+        # <p>{3}</p>
+        # <p>{4}</p>
+        # '''.format(u)
+        response = memory[0]
 
         # Send the "message" field back as the response.
         self.send_response(200)
@@ -60,7 +61,7 @@ class MessageHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
         self.wfile.write(response.encode())
-    
+
     def do_GET(self):
         # First, send a 200 OK response.
         self.send_response(200)
