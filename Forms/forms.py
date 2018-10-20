@@ -43,7 +43,7 @@ class MessageHandler(BaseHTTPRequestHandler):
         memory.append(parse_qs(data)["nanodegree"][0])
         memory.append(parse_qs(data)["status"][0])
 
-        
+        udacian = Udacian(memory)
 
         response = '''
         <h1>{0}</h1>
